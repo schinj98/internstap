@@ -12,22 +12,28 @@ export const useJobs = () => {
 
   const fetchJobs = async (pageNumber = 1) => {
     setLoading(true);
+
     try {
       const response = await fetch(
         `https://api.internstap.in.net/jobs?page=${pageNumber}&limit=${PAGE_SIZE}`
       );
+
       const data = await response.json();
 
+      // Backend returns: { page, limit, total, jobs: [...] }
+      const newJobs = data.jobs || [];
+
       if (pageNumber === 1) {
-        setJobs(data);
+        setJobs(newJobs);
       } else {
-        setJobs((prev) => [...prev, ...data]);
+        setJobs((prev) => [...prev, ...newJobs]);
       }
 
-      // Check if more jobs available
-      if (data.length < PAGE_SIZE) {
+      // Check if more pages exist
+      if (newJobs.length < PAGE_SIZE) {
         setHasMore(false);
       }
+
     } catch (err) {
       console.error("Error fetching jobs:", err);
     } finally {
@@ -35,12 +41,10 @@ export const useJobs = () => {
     }
   };
 
-  // First load
   useEffect(() => {
     fetchJobs(1);
   }, []);
 
-  // Load More function
   const loadMore = () => {
     if (!hasMore) return;
     const nextPage = page + 1;
@@ -48,7 +52,6 @@ export const useJobs = () => {
     fetchJobs(nextPage);
   };
 
-  // Filters
   const uniqueLocations = useMemo(
     () => [...new Set(jobs.map((j) => j.location).filter(Boolean))].sort(),
     [jobs]
