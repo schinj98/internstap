@@ -9,14 +9,25 @@ export const useJobs = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchJobs = async (pageNumber = 1) => {
     setLoading(true);
+    setError(null);
 
     try {
       const response = await fetch(
-        `https://api.internstap.in.net/jobs?page=${pageNumber}&limit=${PAGE_SIZE}`
+        `/api/jobs?page=${pageNumber}&limit=${PAGE_SIZE}`,
       );
+
+      // Check for an HTTP error status (like 401 Unauthorized)
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        
+        // Throw an error with specific details
+        const errorMessage = errorData.error || `API Request Failed with status ${response.status}`;
+        throw new Error(errorMessage);
+      }
 
       const data = await response.json();
 
@@ -32,10 +43,20 @@ export const useJobs = () => {
       // Check if more pages exist
       if (newJobs.length < PAGE_SIZE) {
         setHasMore(false);
+      } else {
+        setHasMore(true);
       }
 
     } catch (err) {
-      console.error("Error fetching jobs:", err);
+      console.error("Error fetching jobs:", err.message);
+      setError(err.message); // Set the error state
+      setHasMore(false);
+      
+      // If page 1 load fails, clear the jobs list
+      if (pageNumber === 1) {
+        setJobs([]);
+      }
+
     } finally {
       setLoading(false);
     }
@@ -46,7 +67,7 @@ export const useJobs = () => {
   }, []);
 
   const loadMore = () => {
-    if (!hasMore) return;
+    if (!hasMore || loading) return;
     const nextPage = page + 1;
     setPage(nextPage);
     fetchJobs(nextPage);
@@ -69,5 +90,6 @@ export const useJobs = () => {
     hasMore,
     uniqueLocations,
     uniqueBatches,
+    error,
   };
 };

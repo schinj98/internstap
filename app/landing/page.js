@@ -29,7 +29,7 @@ export default function HomePage() {
 
       <StatsSection jobs={jobs} locations={uniqueLocations} />
 
-      <div className="max-w-7xl mx-auto py-12 flex gap-8" id="jobs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col lg:flex-row gap-6 lg:gap-8" id="jobs">
         <FiltersSidebar
           locationFilter={locationFilter}
           setLocationFilter={setLocationFilter}
