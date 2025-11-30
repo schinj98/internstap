@@ -13,7 +13,14 @@ export default function HomePage() {
   const [batchFilter, setBatchFilter] = useState("");
   const [salaryFilter, setSalaryFilter] = useState("");
 
-  const { jobs, loading, uniqueLocations, uniqueBatches } = useJobs();
+  const {
+    jobs,
+    loading,
+    loadMore,
+    hasMore,
+    uniqueLocations,
+    uniqueBatches,
+  } = useJobs();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -41,6 +48,8 @@ export default function HomePage() {
           locationFilter={locationFilter}
           batchFilter={batchFilter}
           salaryFilter={salaryFilter}
+          loadMore={loadMore}
+          hasMore={hasMore}
         />
       </div>
     </div>

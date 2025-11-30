@@ -1,15 +1,33 @@
 "use client";
+
 import { useState, useEffect, useMemo } from "react";
 
 export const useJobs = () => {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const PAGE_SIZE = 50;
 
-  const fetchJobs = async () => {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchJobs = async (pageNumber = 1) => {
+    setLoading(true);
     try {
-      const response = await fetch("https://api.internstap.in.net/jobs");
+      const response = await fetch(
+        `https://api.internstap.in.net/jobs?page=${pageNumber}&limit=${PAGE_SIZE}`
+      );
       const data = await response.json();
-      setJobs(data);
+
+      if (pageNumber === 1) {
+        setJobs(data);
+      } else {
+        setJobs((prev) => [...prev, ...data]);
+      }
+
+      // Check if more jobs available
+      if (data.length < PAGE_SIZE) {
+        setHasMore(false);
+      }
     } catch (err) {
       console.error("Error fetching jobs:", err);
     } finally {
@@ -17,10 +35,20 @@ export const useJobs = () => {
     }
   };
 
+  // First load
   useEffect(() => {
-    fetchJobs();
+    fetchJobs(1);
   }, []);
 
+  // Load More function
+  const loadMore = () => {
+    if (!hasMore) return;
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchJobs(nextPage);
+  };
+
+  // Filters
   const uniqueLocations = useMemo(
     () => [...new Set(jobs.map((j) => j.location).filter(Boolean))].sort(),
     [jobs]
@@ -31,5 +59,12 @@ export const useJobs = () => {
     [jobs]
   );
 
-  return { jobs, loading, uniqueLocations, uniqueBatches };
+  return {
+    jobs,
+    loading,
+    loadMore,
+    hasMore,
+    uniqueLocations,
+    uniqueBatches,
+  };
 };
