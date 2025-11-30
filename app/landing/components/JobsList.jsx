@@ -16,20 +16,26 @@ export default function JobsList({
 }) {
   // FILTERS APPLY ON CURRENTLY LOADED JOBS
   const filteredJobs = useMemo(() => {
+    const search = searchTerm.toLowerCase();
+  
     return jobs.filter((job) => {
+      const title = job.job_title?.toLowerCase() || "";
+      const company = job.raw?.company_name?.toLowerCase() || "";
+      const qualification = job.qualification?.toLowerCase() || "";
+  
       const matchSearch =
-        job.job_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.raw?.company_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.qualification?.toLowerCase().includes(searchTerm.toLowerCase());
-
+        title.includes(search) ||
+        company.includes(search) ||
+        qualification.includes(search);
+  
       const matchLoc = !locationFilter || job.location === locationFilter;
       const matchBatch = !batchFilter || job.batch === batchFilter;
       const matchSalary = !salaryFilter || job.salary?.includes(salaryFilter);
-
+  
       return matchSearch && matchLoc && matchBatch && matchSalary;
     });
   }, [jobs, searchTerm, locationFilter, batchFilter, salaryFilter]);
-
+  
   // LOADING UI
   if (loading && jobs.length === 0) {
     return (
