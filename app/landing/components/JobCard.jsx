@@ -10,7 +10,7 @@ export default function JobCard({ job }) {
           {job.logo_link ? (
             <img
               src={job.logo_link}
-              alt={job.raw?.company_name || "Company"}
+              alt={job.company_name || "Company"}
               className="w-16 h-16 rounded-lg object-cover bg-gray-100"
               onError={(e) => {
                 e.target.style.display = "none";
@@ -24,9 +24,9 @@ export default function JobCard({ job }) {
               }`}
           >
             <span className="text-white text-2xl font-bold">
-              {job.raw?.company_name?.charAt(0) ||
-                job.job_title?.charAt(0) ||
-                "J"}
+            {job.company_name?.charAt(0) ||
+              job.job_title?.charAt(0) ||
+              "J"}
             </span>
           </div>
         </div>
@@ -39,9 +39,9 @@ export default function JobCard({ job }) {
                 {job.job_title}
               </h3>
 
-              {job.raw?.company_name && (
+              {job.company_name && (
                 <p className="text-lg text-gray-700 font-medium">
-                  {job.raw.company_name}
+                  {job.company_name}
                 </p>
               )}
             </div>

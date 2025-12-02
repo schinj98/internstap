@@ -1,9 +1,9 @@
-export default function StatsSection({ jobs, locations }) {
+export default function StatsSection({ jobs, locations, total }) {
     return (
       <div className="bg-white py-8 border-b">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="text-3xl font-bold text-blue-600">{jobs.length}+</div>
+            <div className="text-3xl font-bold text-blue-600">{total}+</div>
             <div className="text-gray-600">Active Jobs</div>
           </div>
   

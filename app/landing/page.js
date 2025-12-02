@@ -20,6 +20,7 @@ export default function HomePage() {
     hasMore,
     uniqueLocations,
     uniqueBatches,
+    total,
   } = useJobs();
 
   return (
@@ -27,10 +28,8 @@ export default function HomePage() {
 
       <HeroSection searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      <StatsSection jobs={jobs} locations={uniqueLocations} />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col lg:flex-row gap-6 lg:gap-8" id="jobs">
-        <FiltersSidebar
+      <StatsSection jobs={jobs} total={total} locations={uniqueLocations} />
+      <FiltersSidebar
           locationFilter={locationFilter}
           setLocationFilter={setLocationFilter}
           batchFilter={batchFilter}
@@ -40,6 +39,7 @@ export default function HomePage() {
           uniqueLocations={uniqueLocations}
           uniqueBatches={uniqueBatches}
         />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col lg:flex-row gap-6 lg:gap-8" id="jobs">
 
         <JobsList
           jobs={jobs}
@@ -50,6 +50,7 @@ export default function HomePage() {
           salaryFilter={salaryFilter}
           loadMore={loadMore}
           hasMore={hasMore}
+          total={total}
         />
       </div>
     </div>

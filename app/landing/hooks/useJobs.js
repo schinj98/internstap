@@ -10,6 +10,8 @@ export const useJobs = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
+  const [total, setTotal] = useState(0);
+
 
   const fetchJobs = async (pageNumber = 1) => {
     setLoading(true);
@@ -33,6 +35,7 @@ export const useJobs = () => {
 
       // Backend returns: { page, limit, total, jobs: [...] }
       const newJobs = data.jobs || [];
+      setTotal(data.total); 
 
       if (pageNumber === 1) {
         setJobs(newJobs);
@@ -91,5 +94,6 @@ export const useJobs = () => {
     uniqueLocations,
     uniqueBatches,
     error,
+    total,
   };
 };
