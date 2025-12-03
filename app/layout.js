@@ -14,9 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Internstap - Internships Across India",
+  title: "Internstap - Internships and Fresher's Jobs Across India",
   description: "Browse internships from verified companies",
+  verification: {
+    google: "A2WaKWZujCcZba4WyoK221-5_AxwCcQoUgjj6Vj49UY",
+  },
 };
+
 
 export default function RootLayout({ children }) {
   return (
